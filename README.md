@@ -33,7 +33,7 @@ A collection of C++ syntax examples, from basic typedef struct to advanced CRTP 
 ### 3. 高级模板与元编程 (Advanced Templates)
 | 文件名 | 描述 | 关键概念 |
 | :--- | :--- | :--- |
-| `20_crtp_pattern.cpp` | **奇异递归模板模式** | 静态多态, 编译期接口, Mixins |
+| [`crtp_pattern.cpp`](crtp_pattern.cpp) | **奇异递归模板模式** | 静态多态, 编译期接口, Mixins |
 | `21_sfinae_basics.cpp` | SFINAE 基础入门 | `enable_if`, 重载决议 |
 | `22_variadic_templates.cpp` | 可变参数模板 | 折叠表达式 (C++17), 递归展开 |
 
