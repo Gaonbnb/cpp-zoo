@@ -1,5 +1,4 @@
 
-
 #include <iostream>
 #include <string>
 #include <memory>
@@ -207,6 +206,10 @@ int main_classic() {
 #include <string>
 #include <vector>
 
+#include <iostream>
+#include <string>
+#include <vector>
+
 class Pizza {
 private:
     std::string size;
@@ -216,10 +219,8 @@ private:
     bool extraSauce;
     std::string bakeLevel;
     
-    // 私有构造函数，只能通过Builder创建
     Pizza() = default;
-    
-    friend class PizzaBuilder;  // 允许Builder访问私有成员
+    friend class PizzaBuilder;
     
 public:
     void show() const {
@@ -232,60 +233,56 @@ public:
                   << "\n额外酱料: " << (extraSauce ? "是" : "否")
                   << "\n烘烤程度: " << bakeLevel << "\n";
     }
-    
-    // 建造者类
-    class PizzaBuilder {
-    private:
-        Pizza pizza;
-        
-    public:
-        // 每个方法返回自身引用，支持链式调用
-        PizzaBuilder& setSize(const std::string& s) {
-            pizza.size = s;
-            return *this;
-        }
-        
-        PizzaBuilder& setCrust(const std::string& c) {
-            pizza.crust = c;
-            return *this;
-        }
-        
-        PizzaBuilder& addTopping(const std::string& t) {
-            pizza.toppings.push_back(t);
-            return *this;
-        }
-        
-        PizzaBuilder& addExtraCheese() {
-            pizza.extraCheese = true;
-            return *this;
-        }
-        
-        PizzaBuilder& addExtraSauce() {
-            pizza.extraSauce = true;
-            return *this;
-        }
-        
-        PizzaBuilder& setBakeLevel(const std::string& l) {
-            pizza.bakeLevel = l;
-            return *this;
-        }
-        
-        // 最后调用build()获取产品
-        Pizza build() {
-            // 可以在这里添加验证逻辑
-            if (pizza.size.empty()) throw std::runtime_error("必须指定披萨尺寸");
-            if (pizza.crust.empty()) pizza.crust = "普通";
-            if (pizza.bakeLevel.empty()) pizza.bakeLevel = "中等";
-            
-            return pizza;
-        }
-    };
 };
 
-// 使用示例
+// 独立的 Builder 类
+class PizzaBuilder {
+private:
+    Pizza pizza;
+    
+public:
+    PizzaBuilder& setSize(const std::string& s) {
+        pizza.size = s;
+        return *this;
+    }
+    
+    PizzaBuilder& setCrust(const std::string& c) {
+        pizza.crust = c;
+        return *this;
+    }
+    
+    PizzaBuilder& addTopping(const std::string& t) {
+        pizza.toppings.push_back(t);
+        return *this;
+    }
+    
+    PizzaBuilder& addExtraCheese() {
+        pizza.extraCheese = true;
+        return *this;
+    }
+    
+    PizzaBuilder& addExtraSauce() {
+        pizza.extraSauce = true;
+        return *this;
+    }
+    
+    PizzaBuilder& setBakeLevel(const std::string& l) {
+        pizza.bakeLevel = l;
+        return *this;
+    }
+    
+    Pizza build() {
+        if (pizza.size.empty()) throw std::runtime_error("必须指定披萨尺寸");
+        if (pizza.crust.empty()) pizza.crust = "普通";
+        if (pizza.bakeLevel.empty()) pizza.bakeLevel = "中等";
+        
+        return pizza;
+    }
+};
+
 int main_fluent_builder() {
     // 流式接口：一行代码完成所有设置
-    Pizza myPizza = Pizza::PizzaBuilder()
+    Pizza myPizza = PizzaBuilder()
                         .setSize("大号")
                         .setCrust("薄脆")
                         .addTopping("蘑菇")
@@ -298,7 +295,7 @@ int main_fluent_builder() {
     myPizza.show();
     
     // 另一个不同组合
-    Pizza veggiePizza = Pizza::PizzaBuilder()
+    Pizza veggiePizza = PizzaBuilder()
                             .setSize("中号")
                             .addTopping("蘑菇")
                             .addTopping("青椒")
@@ -308,5 +305,9 @@ int main_fluent_builder() {
     
     veggiePizza.show();
     
+    return 0;
+}
+
+int main() {
     return 0;
 }
