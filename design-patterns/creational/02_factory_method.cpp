@@ -1,4 +1,5 @@
-
+// 工厂方法 = 简单工厂 + 多态
+// 把简单工厂的 if-else 变成了继承体系
 
 #include <iostream>
 #include <memory>
